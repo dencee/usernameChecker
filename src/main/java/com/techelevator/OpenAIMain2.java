@@ -2,7 +2,9 @@ package com.techelevator;
 
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.techelevator.dao.OpenAiConfiguration;
 import com.techelevator.model.OpenAiRequest;
+import com.techelevator.model.OpenAiResponse;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
@@ -16,11 +18,10 @@ public class OpenAIMain2 {
 
     public static void main(String[] args) {
 
-        // Get api key from my local environment variables to keep prying eyes off my key
-        String apiKey = "";
-        apiKey = System.getenv("openAiApiKey");
-
         RestTemplate restTemplate = new RestTemplate();
+        String apiKey = System.getenv("openAiApiKey");
+        OpenAiRequest postData = new OpenAiRequest();
+        OpenAiResponse response = new OpenAiResponse();
 
         if (apiKey == null) {
             System.out.println("This requires you to set a Windows environment variable named openAiApiKey.");
@@ -28,61 +29,44 @@ public class OpenAIMain2 {
             System.out.println("clicking Environment Variables, and clicking New.");
             System.out.println("The key can be acquired through OpenAI.");
         } else {
+            OpenAiConfiguration config = new OpenAiConfiguration(apiKey);
+
             System.out.print("Please enter a username to check: ");
 
             Scanner input = new Scanner(System.in);
 
-            String username = input.nextLine();
+            String userName = input.nextLine().trim();
 
-            // Had to be very explicit to try to get a yes or no answer here.
-            String prompt = "Could the username '" + username + "' be considered offensive, or does it contain any offensive words? Answer only yes or no.";
+            postData.setPrompt(userName);
 
             // Limit processing power!
             int maxTokens = 100;
 
-            OpenAiRequest postData = new OpenAiRequest();
-
-            // Stable version from OpenAI as I created this; this may be updated in the future
-            String model = "text-davinci-003";
-            //String model = postData.getModel();
-
-            // Generate endpoint URL
-            String apiEndpoint = "https://api.openai.com/v1/engines/" + model + "/completions";
-
-            // Create headers, set type to JSON, add api key as bearer auth key
-            HttpHeaders headers = new HttpHeaders();
-            headers.setContentType(MediaType.APPLICATION_JSON);
-            headers.setBearerAuth(apiKey);
 
             // OpenAiRequest is the model for the request - in this case we only send the prompt and max_tokens
-            postData.setPrompt(prompt);
             postData.setMaxTokens(maxTokens);
 
             // Finalize request with the post data and the headers
-            HttpEntity<OpenAiRequest> entity = new HttpEntity<>(postData, headers);
+            HttpEntity<OpenAiRequest> entity = new HttpEntity<>(postData, config.getHeaders());
 
             // Post to the OpenAI endpoint, get a String result
             try{
-
-                JsonNode result2 = restTemplate.postForObject(postData.getApiEndpoint(), entity, JsonNode.class);
+                JsonNode result2 = restTemplate.postForObject(config.getApiEndpoint(), entity, JsonNode.class);
                 try {
                     JsonNode choicesNode = result2.get("choices");
-                    if (choicesNode.isArray() && choicesNode.size() > 0) {
-                        JsonNode firstChoiceNode = choicesNode.get(0);
-                        String firstChoiceText = firstChoiceNode.get("text").asText().trim();
-                        System.out.println(firstChoiceText);
-                        if (firstChoiceText.equals("Yes")) {
-                            System.out.println("The username " + username + " is NOT okay.");
+                    if(response.checkNode(choicesNode)){
+                        if (response.checkUsername(choicesNode)) {
+                            System.out.println("The username " + userName + " is NOT okay.");
                         } else {
-                            System.out.println("The username " + username + " is okay.");
+                            System.out.println("The username " + userName + " is okay.");
                         }
                     } else {
-                        System.out.println("No choices found in the JSON response.");
+                        System.out.println("Error: No choices found in the JSON response.");
                     }
                 } catch (Exception e) {
-                    e.printStackTrace();
+                    System.out.println("RestTemplate failure");
+                    System.out.println(e.getCause());
                 }
-
             }catch (RestClientResponseException e){
                 System.out.println("RestClientResponseException");
                 System.out.println("Error code: " + e.getRawStatusCode() + " " + e.getStatusText());

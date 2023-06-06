@@ -8,27 +8,14 @@ public class OpenAiRequest {
     @JsonProperty("max_tokens")
     private int maxTokens;
 
-    // Need to have this ignored so it does not get passed in as part of the request
-    @JsonIgnore
-    private String model ="text-davinci-003";
-
-    @JsonIgnore
-    private String apiEndpoint = "https://api.openai.com/v1/engines/" + model + "/completions";
-
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
 
     public String getPrompt() {
         return prompt;
     }
 
-    public void setPrompt(String prompt) {
-        this.prompt = prompt;
+    public void setPrompt(String userName) {
+        // Had to be very explicit to try to get a yes or no answer here.
+        this.prompt = prompt = "Could the username '" + userName + "' be considered offensive, or does it contain any offensive words? Answer only yes or no.";
     }
 
     public int getMaxTokens() {
@@ -39,11 +26,4 @@ public class OpenAiRequest {
         this.maxTokens = maxTokens;
     }
 
-    public String getApiEndpoint() {
-        return apiEndpoint;
-    }
-
-    public void setApiEndpoint(String apiEndpoint) {
-        this.apiEndpoint = apiEndpoint;
-    }
 }
