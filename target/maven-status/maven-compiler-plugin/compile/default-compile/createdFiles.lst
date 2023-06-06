@@ -1,0 +1,14 @@
+com\techelevator\model\OpenAiRequest.class
+com\techelevator\model\OpenAiRequestMessage.class
+com\techelevator\NewMain.class
+com\techelevator\model\OpenAiResponse.class
+com\techelevator\services\ConsoleService.class
+com\techelevator\Main.class
+com\techelevator\model\OpenAi.class
+com\techelevator\OpenAIMain.class
+com\techelevator\model\OpenAiResponseMessage.class
+com\techelevator\services\OpenAiServ.class
+com\techelevator\model\CompletionResponseChoice.class
+ExtractFirstChoice.class
+com\techelevator\model\CompletionResponseUsage.class
+com\techelevator\services\OpenAiService.class
