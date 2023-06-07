@@ -1,6 +1,5 @@
 package com.techelevator.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class OpenAiRequest {

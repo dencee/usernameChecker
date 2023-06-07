@@ -1,6 +1,5 @@
 package com.techelevator.dao;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.MediaType;
 
@@ -20,28 +19,11 @@ public class OpenAiConfiguration {
         headers.setBearerAuth(apiKey);
     }
 
-    public String getModel() {
-        return model;
-    }
-
-    public void setModel(String model) {
-        this.model = model;
-    }
     public String getApiEndpoint() {
         return apiEndpoint;
-    }
-
-    public void setApiEndpoint(String apiEndpoint) {
-        this.apiEndpoint = apiEndpoint;
     }
 
     public HttpHeaders getHeaders() {
         return headers;
     }
-
-    public void setHeaders(HttpHeaders headers) {
-        this.headers = headers;
-    }
-
-
 }
