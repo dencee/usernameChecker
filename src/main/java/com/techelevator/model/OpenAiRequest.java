@@ -7,7 +7,6 @@ public class OpenAiRequest {
     @JsonProperty("max_tokens")
     private int maxTokens;
 
-
     public String getPrompt() {
         return prompt;
     }
@@ -24,5 +23,4 @@ public class OpenAiRequest {
     public void setMaxTokens(int maxTokens) {
         this.maxTokens = maxTokens;
     }
-
 }

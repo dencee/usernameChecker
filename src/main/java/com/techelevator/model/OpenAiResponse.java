@@ -16,7 +16,6 @@ public class OpenAiResponse {
     public boolean checkUsername(JsonNode node) {
         JsonNode topNode = node.get(0);
         String topText = topNode.get("text").asText().trim();
-        System.out.println(topText);
 
         return topText.equals("Yes");
     }

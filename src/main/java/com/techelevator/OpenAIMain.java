@@ -16,12 +16,12 @@ public class OpenAIMain {
     public static void main(String[] args) {
 
         RestTemplate restTemplate = new RestTemplate();
-        String apiKey = System.getenv("openAiApiKey");
+        String apiKey = System.getenv("OpenAiApiKey");
         OpenAiRequest postData = new OpenAiRequest();
         OpenAiResponse response = new OpenAiResponse();
 
         if (apiKey == null) {
-            System.out.println("This requires you to set a Windows environment variable named openAiApiKey.");
+            System.out.println("This requires you to set a Windows environment variable named PpenAiApiKey.");
             System.out.println("You can set this in Windows by typing Environment Variables from the Start Menu,");
             System.out.println("clicking Environment Variables, and clicking New.");
             System.out.println("The key can be acquired through OpenAI.");
